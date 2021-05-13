@@ -1,0 +1,12 @@
+# VSCODE project files #
+########################
+.vscode/
+
+# Node #
+#########
+node_modules
+
+# Builds #
+#########
+build
+

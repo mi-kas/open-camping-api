@@ -1,0 +1,34 @@
+{
+  "name": "camping-api",
+  "version": "0.0.1",
+  "description": "Camping search API",
+  "repository": "https://github.com/mi-kas/camping-api.git",
+  "author": "Michael Kaserer <mi.kaserer@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "api"
+  ],
+  "scripts": {
+    "start": "yarn workspaces run start",
+    "test": "yarn workspaces run test",
+    "build": "yarn workspaces run build",
+    "tsc": "yarn workspaces run tsc",
+    "lint": "yarn workspaces run lint",
+    "format": "prettier --write ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn tsc"
+    }
+  },
+  "lint-staged": {
+    "{api}/**/*.{ts,tsx}": "yarn lint --fix"
+  },
+  "devDependencies": {
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.1.2"
+  }
+}
