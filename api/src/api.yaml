@@ -1,0 +1,78 @@
+openapi: "3.0.0"
+info:
+  version: 0.0.1
+  title: Camping API
+  description: An API to search for campgrounds in the EU
+  license:
+    name: MIT
+    url: https://github.com/mi-kas/camping-api/blob/main/LICENSE
+servers:
+  - url: "{server}/api/v1"
+    variables:
+      server:
+        default: http://localhost:4000
+        enum:
+          - http://localhost:4000 # Development server
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /health:
+    get:
+      description: Health endpoint
+      responses:
+        "200":
+          description: Alive
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/Health"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    Health:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+
+    ValidationError:
+      required:
+        - path
+        - message
+        - errorCode
+      properties:
+        path:
+          type: string
+        message:
+          type: string
+        errorCode:
+          type: string
+
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

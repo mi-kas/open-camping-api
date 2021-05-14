@@ -1,4 +1,5 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
+import path from "path";
 import * as OpenApiValidator from "express-openapi-validator";
 
 import { config } from "./config";
@@ -11,16 +12,17 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: "./api.yaml"
+    apiSpec: path.join(__dirname, "api.yaml")
   })
 );
 
 app.use(config.api.path, router);
 
-app.use((err, req, res, next) => {
-  // 7. Customize errors
-  logger.error(err);
-  res.status(err.status || 500).json({
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  logger.debug(`Error handler: ${err.message}`);
+  const code = err.status ?? 500;
+  res.status(code).json({
+    code,
     message: err.message,
     errors: err.errors
   });
