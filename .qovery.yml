@@ -1,0 +1,15 @@
+---
+application:
+  name: "camping-api"
+  project: "Camping API"
+  organization: "QoveryCommunity"
+databases:
+- type: "MONGODB"
+  name: "camping-db"
+  version: "4.4"
+routers:
+- name: "main-camping-api"
+  routes:
+  - application_name: "camping-api"
+    paths:
+    - "/*"
