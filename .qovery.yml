@@ -1,15 +1,18 @@
----
 application:
-  name: "camping-api"
-  project: "Camping API"
-  organization: "QoveryCommunity"
-databases:
-- type: "MONGODB"
-  name: "camping-db"
-  version: "4.4"
+  name: camping-api
+  project: Camping API
+  organization: QoveryCommunity
+  port: 4000
+  dockerfile: api/Dockerfile
+  cpu: 1
+  ram: 512MB
+# databases:
+#   - type: MONGODB
+#     name: camping-db
+#     version: 4.4
 routers:
-- name: "main-camping-api"
-  routes:
-  - application_name: "camping-api"
-    paths:
-    - "/*"
+  - name: main
+    routes:
+      - application_name: camping-api
+        paths:
+          - /
