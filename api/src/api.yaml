@@ -22,20 +22,240 @@ paths:
       description: Health endpoint
       responses:
         "200":
-          description: Alive
-          content:
-            text/plain:
-              schema:
-                $ref: "#/components/schemas/Health"
+          $ref: "#/components/responses/Health"
         default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+          $ref: "#/components/responses/Error"
+
+  /camping:
+    get:
+      description: Search campings
+      parameters:
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            minimum: 0
+          description: The number of campings to skip before starting to collect the result set
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+          description: The numbers of campings to return
+        - in: query
+          name: lat
+          schema:
+            type: number
+            format: float
+            maximum: 85
+            minimum: -85
+          description: Latitude
+        - in: query
+          name: lng
+          schema:
+            type: number
+            format: float
+            maximum: 180
+            minimum: -180
+          description: Longitude
+        - in: query
+          name: radius
+          schema:
+            type: integer
+            minimum: 0
+          description: Radius in km to search within
+      responses:
+        "200":
+          $ref: "#/components/responses/Campings"
+        default:
+          $ref: "#/components/responses/Error"
 
 components:
+  responses:
+    Error:
+      description: Error message
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Health:
+      description: Health response
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Health"
+    Campings:
+      description: Array of campings
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Camping"
   schemas:
+    GeoLocation:
+      properties:
+        type:
+          type: string
+          enum: [Point]
+        coordinates:
+          type: array
+          maxItems: 2
+          minItems: 2
+          items:
+            type: number
+          description: Array with longitude and latitude coordinates
+      required:
+        - type
+        - coordinates
+
+    Address:
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        region:
+          type: string
+        country:
+          type: string
+      required:
+        - street
+        - city
+        - region
+        - country
+
+    Infrastructure:
+      properties:
+        electricityAtPitch:
+          type: boolean
+        waterAtPitch:
+          type: boolean
+        sewageAtPitch:
+          type: boolean
+        gasAtPitch:
+          type: boolean
+        tvAtPitch:
+          type: boolean
+        gasBottleExchange:
+          type: boolean
+        wlan:
+          type: boolean
+        internetTerminal:
+          type: boolean
+        lockers:
+          type: boolean
+        lounge:
+          type: boolean
+        dryingRoom:
+          type: boolean
+        cookingFacilities:
+          type: boolean
+        dogShowers:
+          type: boolean
+        dogMeadow:
+          type: boolean
+        dogBathing:
+          type: boolean
+        rvDisposal:
+          type: boolean
+        supermarket:
+          type: boolean
+        breadService:
+          type: boolean
+        imbiss:
+          type: boolean
+        restaurant:
+          type: boolean
+        wheelchairRamps:
+          type: boolean
+        pavedStreets:
+          type: boolean
+        bonfireArea:
+          type: boolean
+        campfireAllowedAtPitch:
+          type: boolean
+        firewood:
+          type: boolean
+        charcoalBbqAllowed:
+          type: boolean
+        tableBenches:
+          type: boolean
+
+    Sanitary:
+      properties:
+        babyChangeRoom:
+          type: boolean
+        cabins:
+          type: boolean
+        rentableCabins:
+          type: boolean
+        wheelchairAccessible:
+          type: boolean
+        washingMachines:
+          type: boolean
+        clothesDryer:
+          type: boolean
+
+    Leisure:
+      properties:
+        playground:
+          type: boolean
+
+    Rentals:
+      properties:
+        tents:
+          type: boolean
+
+    CampingLinks:
+      properties:
+        campinginfo:
+          type: string
+        website:
+          type: string
+      required:
+        - campinginfo
+
+    Camping:
+      properties:
+        _id:
+          type: string
+          format: mongo-objectid
+        name:
+          type: string
+        description:
+          type: string
+        stars:
+          type: number
+        location:
+          $ref: "#/components/schemas/GeoLocation"
+        address:
+          $ref: "#/components/schemas/Address"
+        infrastructure:
+          $ref: "#/components/schemas/Infrastructure"
+        sanitary:
+          $ref: "#/components/schemas/Sanitary"
+        leisure:
+          $ref: "#/components/schemas/Leisure"
+        rentals:
+          $ref: "#/components/schemas/Rentals"
+        links:
+          $ref: "#/components/schemas/CampingLinks"
+      required:
+        - name
+        - description
+        - location
+        - address
+        - infrastructure
+        - sanitary
+        - leisure
+        - rentals
+        - links
+
     Health:
       required:
         - status
@@ -58,12 +278,8 @@ components:
 
     Error:
       required:
-        - code
         - message
       properties:
-        code:
-          type: integer
-          format: int32
         message:
           type: string
         errors:

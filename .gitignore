@@ -49,6 +49,4 @@ coverage
 build
 tsconfig.tsbuildinfo
 
-# GraphQL Codegen types #
-###########
-graphql.ts
+data/
