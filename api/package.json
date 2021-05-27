@@ -13,7 +13,9 @@
     "build": "tsc",
     "postbuild": "cp src/api.yaml build/api.yaml",
     "test": "echo 'No tests defined yet'",
-    "lint": "eslint --ext ts src"
+    "test:load": "artillery run src/loadtest.yaml",
+    "lint": "eslint --ext ts src",
+    "generate": "openapi-typescript src/api.yaml --output src/types/api.ts"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
@@ -29,9 +31,11 @@
     "@types/node": "^15.0.3",
     "@types/pino": "^6.3.3",
     "@typescript-eslint/parser": "^4.5.0",
+    "artillery": "^1.7.2",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "openapi-typescript": "^3.3.1",
     "pino-pretty": "^4.3.0",
     "rimraf": "^3.0.2",
     "ts-node-dev": "^1.0.0",

@@ -1,0 +1,22 @@
+config:
+  target: "http://localhost:4000/api/v1"
+  phases:
+    - duration: 60
+      arrivalRate: 25
+  variables:
+    lat:
+      - 46.6283100 # Schlanders
+      - 52.520008 # Berlin
+      - 43.99942 # Riccione
+    lng:
+      - 10.7680900
+      - 13.404954
+      - 12.65689
+
+scenarios:
+  - name: "Search campings with long & lat"
+    flow:
+      - get:
+          url: "/campings?lat={{ lat }}&lng={{ lng }}&radius=25&offset=0&limit=100"
+          headers:
+            X-Api-Key: "123456"

@@ -7,4 +7,4 @@ router.get("/health", (_req: Request, res: Response) =>
   res.json({ status: "Alive" })
 );
 
-router.get("/camping", findNearby);
+router.get("/campings", findNearby);

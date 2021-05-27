@@ -1,20 +1,7 @@
 import mongoose from "mongoose";
+import { components } from "../types/api";
 
-export interface Camping {
-  name: string;
-  location: {
-    type: "Point";
-    coordinates: Array<number>;
-  };
-  address: {
-    street: string;
-    city: string;
-    region: string;
-    country: string;
-  };
-  description: string;
-  stars: number;
-}
+export type Camping = Omit<components["schemas"]["Camping"], "_id">;
 
 export interface CampingDocument extends Camping, mongoose.Document {}
 

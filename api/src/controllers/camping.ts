@@ -1,31 +1,22 @@
 import { Request, Response } from "express";
-import { FilterQuery } from "mongoose";
-import CampingSchema, { CampingDocument } from "../models/camping";
-import { logger } from "../utils";
+import { searchCamping, CampingSearch } from "../services/camping";
 
 export const findNearby = async (req: Request, res: Response) => {
-  logger.info(req.query);
   const offset = Number(req.query?.offset ?? 0);
   const limit = Number(req.query?.limit ?? 20);
-  let filters: FilterQuery<CampingDocument> = {};
+  let searchParams: CampingSearch = { offset, limit };
 
   if (req.query?.lat && req.query?.lng) {
-    filters = {
-      ...filters,
+    searchParams = {
+      ...searchParams,
       location: {
-        $near: {
-          ...(!Number.isNaN(req.query?.radius) && {
-            $maxDistance: Number(req.query.radius) * 1000
-          }),
-          $geometry: {
-            type: "Point",
-            coordinates: [req.query.lng, req.query.lat]
-          }
-        }
+        radius: Number(req.query.radius),
+        lat: Number(req.query.lat),
+        lng: Number(req.query.lng)
       }
     };
   }
-  const items = await CampingSchema.find(filters).skip(offset).limit(limit);
 
+  const items = await searchCamping(searchParams);
   return res.json({ items });
 };

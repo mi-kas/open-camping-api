@@ -26,7 +26,7 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
-  /camping:
+  /campings:
     get:
       description: Search campings
       parameters:
@@ -246,6 +246,7 @@ components:
         links:
           $ref: "#/components/schemas/CampingLinks"
       required:
+        - _id
         - name
         - description
         - location
