@@ -11,6 +11,7 @@
     "start": "ts-node-dev --transpile-only --no-notify src/server.ts",
     "prebuild": "rimraf build",
     "build": "tsc",
+    "postbuild": "cp src/api.yaml build/api.yaml",
     "test": "echo 'No tests defined yet'",
     "lint": "eslint --ext ts src"
   },
