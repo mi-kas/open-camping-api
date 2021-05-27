@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
+import helmet from "helmet";
 import { Server } from "http";
 import path from "path";
 import * as OpenApiValidator from "express-openapi-validator";
@@ -12,7 +13,7 @@ const app = express();
 export let server: Server;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.disable("x-powered-by");
+app.use(helmet());
 
 app.use(
   OpenApiValidator.middleware({
