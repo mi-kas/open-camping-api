@@ -15,13 +15,8 @@
     "build": "yarn workspaces run build",
     "tsc": "yarn workspaces run tsc",
     "lint": "yarn workspaces run lint",
-    "format": "prettier --write ."
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "yarn tsc"
-    }
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "lint-staged": {
     "{api}/**/*.{ts,tsx}": "yarn lint --fix"

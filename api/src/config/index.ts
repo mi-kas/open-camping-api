@@ -1,4 +1,8 @@
-if (process.env.NODE_ENV !== "production") require("dotenv").config();
+import * as dotenv from "dotenv";
 
-export * from "./config"
-export * from "./mongoose"
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
+export * from "./config";
+export * from "./mongoose";

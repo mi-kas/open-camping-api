@@ -15,6 +15,7 @@
     "lint": "eslint --ext ts src"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-openapi-validator": "^4.12.10",
     "mongoose": "^5.10.11",
@@ -26,7 +27,6 @@
     "@types/node": "^15.0.3",
     "@types/pino": "^6.3.3",
     "@typescript-eslint/parser": "^4.5.0",
-    "dotenv": "^9.0.2",
     "eslint": "^7.12.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.1.4",
