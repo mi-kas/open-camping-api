@@ -11,7 +11,7 @@ export type CampingSearch = {
   limit: number;
 };
 
-export const searchCamping = (search: CampingSearch) => {
+export const searchCamping = async (search: CampingSearch) => {
   let filters: FilterQuery<CampingDocument> = {};
 
   if (search?.location) {
@@ -19,7 +19,7 @@ export const searchCamping = (search: CampingSearch) => {
       ...filters,
       location: {
         $near: {
-          $maxDistance: search.location.radius * 1000,
+          $maxDistance: search.location.radius * 1000, // km to meters
           $geometry: {
             type: "Point",
             coordinates: [search.location.lng, search.location.lat]
@@ -28,8 +28,15 @@ export const searchCamping = (search: CampingSearch) => {
       }
     };
   }
-  return CampingSchema.find(filters)
+  const campings = await CampingSchema.find(filters)
     .skip(search.offset)
     .limit(search.limit)
-    .lean();
+    .exec();
+
+  return campings.map(camping => camping.toResponse());
+};
+
+export const searchCampingById = async (id: string) => {
+  const camping = await CampingSchema.findById(id).exec();
+  return camping?.toResponse();
 };

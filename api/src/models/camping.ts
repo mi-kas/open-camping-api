@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
 import { components } from "../types/api";
 
-export type Camping = Omit<components["schemas"]["Camping"], "_id">;
+export type Camping = Omit<components["schemas"]["Camping"], "id">;
 
-export interface CampingDocument extends Camping, mongoose.Document {}
+export interface CampingDocument extends Camping, mongoose.Document {
+  toResponse(): components["schemas"]["Camping"];
+}
 
-const CampingSchema = new mongoose.Schema(
+const CampingSchema = new mongoose.Schema<
+  CampingDocument,
+  mongoose.Model<CampingDocument>
+>(
   {
     name: { type: String, required: true },
     location: {
@@ -109,8 +114,26 @@ const CampingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+CampingSchema.methods.toResponse =
+  function (): components["schemas"]["Camping"] {
+    return {
+      id: this._id,
+      name: this.name,
+      stars: this.stars,
+      location: this.location,
+      address: this.address,
+      infrastructure: this.infrastructure,
+      sanitary: this.sanitary,
+      leisure: this.leisure,
+      rentals: this.rentals
+    };
+  };
+
 CampingSchema.index({ location: "2dsphere" });
 
-const model = mongoose.model<CampingDocument>("Camping", CampingSchema);
+const model = mongoose.model<CampingDocument, mongoose.Model<CampingDocument>>(
+  "Camping",
+  CampingSchema
+);
 
 export default model;

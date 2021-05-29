@@ -72,6 +72,21 @@ paths:
         default:
           $ref: "#/components/responses/Error"
 
+  /campings/{id}:
+    get:
+      description: Get camping by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/Camping"
+        default:
+          $ref: "#/components/responses/Error"
+
 components:
   responses:
     Error:
@@ -97,6 +112,15 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/Camping"
+    Camping:
+      description: Single camping object
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              item:
+                $ref: "#/components/schemas/Camping"
   schemas:
     GeoLocation:
       properties:
@@ -223,13 +247,13 @@ components:
 
     Camping:
       properties:
-        _id:
+        id:
           type: string
-          format: mongo-objectid
+          # format: mongo-objectid
         name:
           type: string
-        description:
-          type: string
+        # description:
+        #   type: string
         stars:
           type: number
         location:
@@ -244,19 +268,19 @@ components:
           $ref: "#/components/schemas/Leisure"
         rentals:
           $ref: "#/components/schemas/Rentals"
-        links:
-          $ref: "#/components/schemas/CampingLinks"
+        # links:
+        #   $ref: "#/components/schemas/CampingLinks"
       required:
-        - _id
+        - id
         - name
-        - description
+        # - description
         - location
         - address
         - infrastructure
         - sanitary
         - leisure
         - rentals
-        - links
+        # - links
 
     Health:
       required:

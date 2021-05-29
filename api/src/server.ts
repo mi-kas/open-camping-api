@@ -17,26 +17,11 @@ app.use(helmet());
 
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: path.join(__dirname, "api.yaml"),
-    serDes: [
-      OpenApiValidator.serdes.dateTime,
-      OpenApiValidator.serdes.date,
-      // custom serializer for mongo's object ids
-      {
-        format: "mongo-objectid",
-        deserialize: (s: string) => mongoose.Types.ObjectId(s),
-        serialize: (o: mongoose.Types.ObjectId): string => o.toString()
-      }
-    ]
+    apiSpec: path.join(__dirname, "api.yaml")
   })
 );
 
 app.use(config.api.path, router);
-
-// Capture 404 errors
-app.use((_req: Request, res: Response, _next: NextFunction) => {
-  res.status(404).json({ message: "Unable to find the requested resource!" });
-});
 
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   logger.debug(`Error handler: ${err.message}`);

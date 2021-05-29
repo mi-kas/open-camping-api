@@ -19,7 +19,7 @@ export interface paths {
       parameters: {
         query: {
           /** The number of campings to skip before starting to collect the result set */
-          offset?: number;
+          offset: number;
           /** The numbers of campings to return */
           limit?: number;
           /** Latitude */
@@ -32,6 +32,20 @@ export interface paths {
       };
       responses: {
         200: components["responses"]["Campings"];
+        default: components["responses"]["Error"];
+      };
+    };
+  };
+  "/campings/{id}": {
+    /** Get camping by id */
+    get: {
+      parameters: {
+        path: {
+          id: string;
+        };
+      };
+      responses: {
+        200: components["responses"]["Camping"];
         default: components["responses"]["Error"];
       };
     };
@@ -99,9 +113,8 @@ export interface components {
       website?: string;
     };
     Camping: {
-      _id: string;
+      id: string;
       name: string;
-      description: string;
       stars?: number;
       location: components["schemas"]["GeoLocation"];
       address: components["schemas"]["Address"];
@@ -109,7 +122,6 @@ export interface components {
       sanitary: components["schemas"]["Sanitary"];
       leisure: components["schemas"]["Leisure"];
       rentals: components["schemas"]["Rentals"];
-      links: components["schemas"]["CampingLinks"];
     };
     Health: {
       status: string;
@@ -142,6 +154,14 @@ export interface components {
       content: {
         "application/json": {
           items?: components["schemas"]["Camping"][];
+        };
+      };
+    };
+    /** Single camping object */
+    Camping: {
+      content: {
+        "application/json": {
+          item?: components["schemas"]["Camping"];
         };
       };
     };
