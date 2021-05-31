@@ -1,11 +1,16 @@
-import { Router, Request, Response } from "express";
+import { Context } from "koa";
+import Router from "koa-router";
+import { config } from "./config";
 import { findNearby, findById } from "./controllers/camping";
 
-export const router = Router();
+export const router = new Router({
+  prefix: config.api.path
+});
 
-router.get("/health", (_req: Request, res: Response) =>
-  res.json({ status: "alive" })
-);
+router.get("/health", (ctx: Context) => {
+  ctx.status = 200;
+  ctx.body = { status: "alive" };
+});
 
 router.get("/campings", findNearby);
 router.get("/campings/:id", findById);

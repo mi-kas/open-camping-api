@@ -1,19 +1,32 @@
-import express, { Request, Response, NextFunction } from "express";
-import helmet from "helmet";
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
+import helmet from "koa-helmet";
 import { Server } from "http";
 import path from "path";
-import * as OpenApiValidator from "express-openapi-validator";
-import mongoose from "mongoose";
+import * as OpenApiValidator from "koa-openapi-validator";
 
 import { config, connectMongoose } from "./config";
 import { router } from "./router";
 import { logger } from "./utils";
 
-const app = express();
-export let server: Server;
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+const app = new Koa();
+app.use(bodyParser());
 app.use(helmet());
+
+app.use(router.routes());
+
+app.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    logger.info(`Error handler: ${err.message}`);
+    ctx.status = err.status ?? 500;
+    ctx.body = {
+      message: err.message,
+      errors: err.errors
+    };
+  }
+});
 
 app.use(
   OpenApiValidator.middleware({
@@ -21,16 +34,7 @@ app.use(
   })
 );
 
-app.use(config.api.path, router);
-
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  logger.debug(`Error handler: ${err.message}`);
-  res.status(err.status ?? 500).json({
-    message: err.message,
-    errors: err.errors
-  });
-});
-
+export let server: Server;
 connectMongoose(() => {
   server = app.listen({ port: config.server.port }, () => {
     logger.info(

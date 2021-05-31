@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Context } from "koa";
 import mongoose from "mongoose";
 import {
   searchCamping,
@@ -6,55 +6,41 @@ import {
   CampingSearch
 } from "../services/camping";
 
-const notFoundError = {
-  status: 404,
-  message: "camping not found"
-};
-
-export const findNearby = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const offset = Number(req.query?.offset ?? 0);
-  const limit = Number(req.query?.limit ?? 20);
+export const findNearby = async (ctx: Context, next) => {
+  const offset = Number(ctx.query?.offset ?? 0);
+  const limit = Number(ctx.query?.limit ?? 20);
   let searchParams: CampingSearch = { offset, limit };
 
-  if (req.query?.lat && req.query?.lng) {
-    if (!req.query?.radius) {
-      return next({
-        status: 400,
-        message: "request.query should have required property 'radius'"
-      });
+  if (ctx.query?.lat && ctx.query?.lng) {
+    if (!ctx.query?.radius) {
+      ctx.throw(400, "request.query should have required property 'radius'");
     }
     searchParams = {
       ...searchParams,
       location: {
-        radius: Number(req.query.radius),
-        lat: Number(req.query.lat),
-        lng: Number(req.query.lng)
+        radius: Number(ctx.query.radius),
+        lat: Number(ctx.query.lat),
+        lng: Number(ctx.query.lng)
       }
     };
   }
 
   const items = await searchCamping(searchParams);
-  return res.json({ items });
+  ctx.status = 200;
+  ctx.body = { items };
 };
 
-export const findById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    return next(notFoundError);
+export const findById = async (ctx: Context, next) => {
+  if (!mongoose.Types.ObjectId.isValid(ctx.params.id)) {
+    ctx.throw(404, "camping not found");
   }
 
-  const item = await searchCampingById(req.params.id);
+  const item = await searchCampingById(ctx.params.id);
 
   if (!item) {
-    return next(notFoundError);
+    ctx.throw(404, "camping not found");
   }
 
-  return res.json({ item });
+  ctx.status = 200;
+  ctx.body = { item };
 };
