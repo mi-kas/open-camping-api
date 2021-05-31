@@ -3,7 +3,6 @@ import helmet from "helmet";
 import { Server } from "http";
 import path from "path";
 import * as OpenApiValidator from "express-openapi-validator";
-import mongoose from "mongoose";
 
 import { config, connectMongoose } from "./config";
 import { router } from "./router";
