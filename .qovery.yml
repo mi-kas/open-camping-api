@@ -5,7 +5,7 @@ application:
   port: 4000
   dockerfile: api/Dockerfile
   cpu: 1
-  ram: 512MB
+  ram: 1GB
 databases:
   - type: MONGODB
     name: open-camping-db
