@@ -1,8 +1,8 @@
 {
-  "name": "@camping-api/api",
+  "name": "@open-camping-api/api",
   "version": "0.0.1",
   "description": "Camping search API",
-  "repository": "https://github.com/mi-kas/camping-api.git",
+  "repository": "https://github.com/mi-kas/open-camping-api.git",
   "author": "Michael Kaserer <mi.kaserer@gmail.com>",
   "license": "MIT",
   "main": "src/server.ts",

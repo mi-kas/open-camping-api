@@ -5,7 +5,7 @@ info:
   description: An API to search for campgrounds in the EU
   license:
     name: MIT
-    url: https://github.com/mi-kas/camping-api/blob/main/LICENSE
+    url: https://github.com/mi-kas/open-camping-api/blob/main/LICENSE
 servers:
   - url: "{server}/api/v1"
     variables:

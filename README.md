@@ -6,4 +6,4 @@
   Open Camping API
 </h1>
 
-> Open REST API to search for campings/campsites/campgrounds nearby
+> Open REST API to search for your next camping/campsite/campground nearby
