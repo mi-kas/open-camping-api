@@ -9,7 +9,9 @@
 ![Version](https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mi-kas/open-camping-api/blob/main/LICENSE)
 
-> Open REST API to search for your next camping/campsite/campground nearby
+> Open REST API for finding the best campsite near you
+
+Camping is calling! Let's make campsite search & discovery easier by providing an easy-to-use REST API based on OpenStreetMap data.
 
 ## Install
 
