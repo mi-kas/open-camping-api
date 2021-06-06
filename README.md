@@ -7,3 +7,5 @@
 </h1>
 
 > Open REST API to search for your next camping/campsite/campground nearby
+
+Emojis by [OpenMoji](https://openmoji.org/).

@@ -132,7 +132,7 @@ CampingSchema.methods.toResponse =
 CampingSchema.index({ location: "2dsphere" });
 
 const model = mongoose.model<CampingDocument, mongoose.Model<CampingDocument>>(
-  "Camping",
+  "camping",
   CampingSchema
 );
 

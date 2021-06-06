@@ -1,0 +1,37 @@
+{
+  "name": "@open-camping-api/importer",
+  "version": "0.0.1",
+  "description": "Camping data importer",
+  "repository": "https://github.com/mi-kas/open-camping-api.git",
+  "author": "Michael Kaserer <mi.kaserer@gmail.com>",
+  "license": "MIT",
+  "main": "src/importer.ts",
+  "scripts": {
+    "tsc": "tsc -p . --noEmit",
+    "start": "ts-node-dev --transpile-only --no-notify src/importer.ts",
+    "prebuild": "rimraf build",
+    "build": "tsc",
+    "test": "echo 'No tests defined yet'",
+    "lint": "eslint --ext ts src"
+  },
+  "dependencies": {
+    "agenda": "^4.1.3",
+    "dotenv": "^10.0.0",
+    "mongoose": "^5.12.12",
+    "node-fetch": "^2.6.1",
+    "p-limit": "^3.1.0",
+    "pino": "^6.11.3"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.11.97",
+    "@types/node-fetch": "^2.5.10",
+    "@types/pino": "^6.3.8",
+    "@typescript-eslint/parser": "^4.26.0",
+    "eslint": "^7.12.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "pino-pretty": "^5.0.2",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.4"
+  }
+}
