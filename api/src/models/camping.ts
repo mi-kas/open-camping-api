@@ -7,10 +7,7 @@ export interface CampingDocument extends Camping, mongoose.Document {
   toResponse(): components["schemas"]["Camping"];
 }
 
-const CampingSchema = new mongoose.Schema<
-  CampingDocument,
-  mongoose.Model<CampingDocument>
->(
+const CampingSchema = new mongoose.Schema<CampingDocument>(
   {
     name: { type: String, required: true },
     location: {
