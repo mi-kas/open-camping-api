@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 export type Country = {
   name: string;
   code: string;
-  locked: boolean;
-  lastUpdate?: Date;
+  lastUpdateAt?: Date;
 };
 
 export interface CountryDocument extends Country, mongoose.Document {}
@@ -16,8 +15,7 @@ const CountrySchema = new mongoose.Schema<
   {
     name: { type: String, required: true },
     code: { type: String, required: true },
-    locked: { type: Boolean, required: true, default: false },
-    lastUpdate: { type: Date }
+    lastUpdateAt: { type: Date }
   },
   { timestamps: true }
 );

@@ -14,6 +14,7 @@ export type Camping = {
     coordinates: Array<number>; // Note that longitude comes first in a GeoJSON coordinate array, not latitude
   };
   tags: any;
+  countryCode: string;
 };
 
 export interface CampingDocument extends Camping, mongoose.Document {}
@@ -36,7 +37,8 @@ const CampingSchema = new mongoose.Schema<
         required: true
       }
     },
-    tags: { type: Object }
+    tags: { type: Object },
+    countryCode: { type: String, required: true }
   },
   { timestamps: true }
 );

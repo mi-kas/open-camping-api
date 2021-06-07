@@ -1,16 +1,15 @@
 import fetch from "node-fetch";
 import { logger, generateUrl } from "../utils";
-import { lockCountry, unlockAndUpdateLastUpdateCountry } from ".";
+import CampingSchema, { Camping } from "../models/camping";
 
 export const fetchCampings = async (
   countryCode: string,
   part: string,
   tag: string
 ) => {
-  await lockCountry(countryCode);
   const url = generateUrl(countryCode, part, tag);
   const current = `Country: ${countryCode}\tPart: ${part}\tTag: ${tag}`;
-  // logger.info(current);
+  logger.debug(`${current}\tStarted`);
   const start = Date.now();
   const res = await fetch(url);
   const text = await res.text();
@@ -20,20 +19,46 @@ export const fetchCampings = async (
       logger.error(`${current}\tREMARK: ${data.remark}`);
       throw Error("Got data with remark");
     }
-    logger.info(
+    logger.debug(
       `${current}\tCampings: ${data?.elements?.length ?? 0}\tDuration: ${(
         (Date.now() - start) /
         1000
       ).toFixed(0)}sec`
     );
-    // return data?.elements ?? [];
+    return data?.elements ?? [];
   } catch (err) {
     logger.error(
-      `${current}\tERROR: Did not receive JSON, instead received: ${url}`,
-      text
+      `${current}\tERROR: Did not receive JSON, instead received from: ${url}\t${text}`
     );
     throw err;
-  } finally {
-    await unlockAndUpdateLastUpdateCountry(countryCode);
+  }
+};
+
+const getCampingFromRaw = (raw: any, countryCode: string): Camping => {
+  // Longitude comes first in a GeoJSON coordinate array, not latitude
+  const coordinates =
+    raw.type === "node" ? [raw.lon, raw.lat] : [raw.center.lon, raw.center.lat];
+  return {
+    osmId: raw.id,
+    type: raw.type,
+    location: {
+      type: "Point",
+      coordinates
+    },
+    tags: raw.tags,
+    countryCode
+  };
+};
+
+export const saveCampings = async (
+  rawCampings: Array<any>,
+  countryCode: string
+) => {
+  for (const rawCamping of rawCampings) {
+    await CampingSchema.findOneAndUpdate(
+      { osmId: rawCamping.id },
+      getCampingFromRaw(rawCamping, countryCode),
+      { upsert: true, new: true }
+    );
   }
 };

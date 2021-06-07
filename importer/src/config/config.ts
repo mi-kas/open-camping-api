@@ -13,7 +13,8 @@ export const config = {
     reconnectTimeoutMs: 30000 // 30 sec
   },
   importer: {
-    intervalInDays: 30
+    intervalInDays: 7,
+    concurrency: 20
   },
   logger: {
     level: process.env.LOG_LEVEL ?? "info"

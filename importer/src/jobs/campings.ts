@@ -1,16 +1,28 @@
 import { Job } from "agenda";
-import { getCountriesNotLockedAndNotUpdated, fetchCampings } from "../services";
+import {
+  getCountriesNotLockedAndNotUpdated,
+  fetchCampings,
+  saveCampings,
+  updateCountriesLastUpdatedAt
+} from "../services";
 import { logger } from "../utils";
 import { agenda, config } from "../config";
+
+type CampingImport = {
+  countryCode: string;
+  part: string;
+  tag: string;
+};
 
 export const importCampingsForCountry = async ({
   attrs: {
     data: { countryCode, part, tag }
   }
-}: Job<{ countryCode: string; part: string; tag: string }>) => {
-  logger.info(`Import campings for country: ${countryCode}`);
+}: Job<CampingImport>) => {
   try {
-    await fetchCampings(countryCode, part, tag);
+    const campings = await fetchCampings(countryCode, part, tag);
+    await saveCampings(campings, countryCode);
+    await updateCountriesLastUpdatedAt(countryCode);
   } catch (err) {
     logger.warn(`Retry immport campings for country: ${countryCode}`);
     agenda.now("import campings for country", {
@@ -22,17 +34,18 @@ export const importCampingsForCountry = async ({
 };
 
 export const startImport = async () => {
-  logger.info(`Starting import`);
+  logger.debug(`Starting import`);
   const countries = await getCountriesNotLockedAndNotUpdated();
-  logger.info(`Got ${countries.length} countries`);
+  logger.debug(`Got ${countries.length} countries`);
   for (const country of countries) {
     for (const tag of config.osm.tags) {
       for (const part of config.osm.parts) {
-        agenda.now("import campings for country", {
+        const importData: CampingImport = {
           countryCode: country.code,
           part,
           tag
-        });
+        };
+        agenda.now("import campings for country", importData);
       }
     }
   }
