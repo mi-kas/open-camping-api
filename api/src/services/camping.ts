@@ -1,5 +1,5 @@
 import { FilterQuery } from "mongoose";
-import CampingSchema, { CampingDocument } from "../models/camping";
+import { CampingModel, CampingDocument } from "@open-camping-api/commons";
 
 export type CampingSearch = {
   location?: {
@@ -28,7 +28,7 @@ export const searchCamping = async (search: CampingSearch) => {
       }
     };
   }
-  const campings = await CampingSchema.find(filters)
+  const campings = await CampingModel.find(filters)
     .skip(search.offset)
     .limit(search.limit)
     .exec();
@@ -37,6 +37,6 @@ export const searchCamping = async (search: CampingSearch) => {
 };
 
 export const searchCampingById = async (id: string) => {
-  const camping = await CampingSchema.findById(id).exec();
+  const camping = await CampingModel.findById(id).exec();
   return camping?.toResponse();
 };

@@ -18,25 +18,20 @@
     "generate": "openapi-typescript src/api.yaml --output src/types/api.ts"
   },
   "dependencies": {
-    "dotenv": "^10.0.0",
+    "@open-camping-api/commons": "*",
     "express": "^4.17.1",
     "express-openapi-validator": "^4.12.11",
-    "helmet": "^4.6.0",
-    "mongoose": "^5.12.12",
-    "pino": "^6.7.0"
+    "helmet": "^4.6.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.12",
-    "@types/mongoose": "^5.7.36",
     "@types/node": "^15.6.1",
-    "@types/pino": "^6.3.3",
     "@typescript-eslint/parser": "^4.26.0",
     "artillery": "^1.7.2",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.1.4",
     "openapi-typescript": "^3.3.1",
-    "pino-pretty": "^5.0.2",
     "rimraf": "^3.0.2",
     "ts-node-dev": "^1.0.0",
     "typescript": "^4.3.2"

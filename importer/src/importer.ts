@@ -1,5 +1,5 @@
-import { connectMongoose, startAgenda } from "./config";
-import { logger } from "./utils";
+import { startAgenda } from "./config";
+import { logger, connectMongoose } from "@open-camping-api/commons";
 
 connectMongoose(async () => {
   logger.info(`Importer is running 🚀`);

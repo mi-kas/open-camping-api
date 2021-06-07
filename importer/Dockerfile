@@ -4,7 +4,7 @@ COPY package.json .
 COPY yarn.lock .
 COPY tsconfig.json .
 COPY .eslintrc.js .
-COPY api ./api
+COPY importer ./importer
 COPY commons ./commons
 RUN yarn install --frozen-lockfile
 
@@ -22,12 +22,12 @@ FROM node:lts-alpine AS release
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
-COPY --from=build /app/api/package.json /app/api/package.json
-COPY --from=build /app/api/build /app/api/build
+COPY --from=build /app/importer/package.json /importer/api/package.json
+COPY --from=build /app/importer/build /importer/api/build
 COPY --from=build /app/commons/build /app/commons/build
 # Remove dev dependencies
 RUN yarn install --frozen-lockfile --production
 # Clear the global yarn cache
 RUN yarn cache clean
 EXPOSE 4000
-CMD ["node", "api/build/server.js"]
+CMD ["node", "importer/build/importer.js"]

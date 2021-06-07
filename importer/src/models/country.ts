@@ -20,9 +20,7 @@ const CountrySchema = new mongoose.Schema<
   { timestamps: true }
 );
 
-const model = mongoose.model<CountryDocument, mongoose.Model<CountryDocument>>(
-  "Country",
-  CountrySchema
-);
-
-export default model;
+export const CountryModel = mongoose.model<
+  CountryDocument,
+  mongoose.Model<CountryDocument>
+>("Country", CountrySchema);

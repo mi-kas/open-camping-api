@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
-import { logger, generateUrl } from "../utils";
-import CampingSchema, { Camping } from "../models/camping";
+import { generateUrl } from "../utils";
+import { logger, Camping, CampingModel } from "@open-camping-api/commons";
 
 export const fetchCampings = async (
   countryCode: string,
@@ -55,7 +55,7 @@ export const saveCampings = async (
   countryCode: string
 ) => {
   for (const rawCamping of rawCampings) {
-    await CampingSchema.findOneAndUpdate(
+    await CampingModel.findOneAndUpdate(
       { osmId: rawCamping.id },
       getCampingFromRaw(rawCamping, countryCode),
       { upsert: true, new: true }

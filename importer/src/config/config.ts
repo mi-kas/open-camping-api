@@ -8,16 +8,9 @@ const hosts = [
 ];
 
 export const config = {
-  db: {
-    uri: process.env.DB_URI,
-    reconnectTimeoutMs: 30000 // 30 sec
-  },
   importer: {
     intervalInDays: 7,
     concurrency: 20
-  },
-  logger: {
-    level: process.env.LOG_LEVEL ?? "info"
   },
   osm: {
     host: hosts[2],

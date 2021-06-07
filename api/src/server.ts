@@ -3,10 +3,10 @@ import helmet from "helmet";
 import { Server } from "http";
 import path from "path";
 import * as OpenApiValidator from "express-openapi-validator";
+import { logger, connectMongoose } from "@open-camping-api/commons";
 
-import { config, connectMongoose } from "./config";
+import { config } from "./config";
 import { router } from "./router";
-import { logger } from "./utils";
 
 const app = express();
 export let server: Server;

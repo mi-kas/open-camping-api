@@ -1,11 +1,11 @@
 import Agenda from "agenda";
-import { config } from ".";
-import { logger } from "../utils";
+import { logger, config as commonsConfig } from "@open-camping-api/commons";
+import { config } from "./config";
 import { startImport, importCampingsForCountry } from "../jobs";
 
 export const agenda = new Agenda({
   db: {
-    address: config.db.uri,
+    address: commonsConfig.db.uri,
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true

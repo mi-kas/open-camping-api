@@ -1,5 +1,5 @@
 import { config } from "../config";
-import CountrySchema from "../models/country";
+import { CountryModel } from "../models";
 
 const nowMinusDays = (days: number) => {
   var date = new Date();
@@ -8,7 +8,7 @@ const nowMinusDays = (days: number) => {
 };
 
 export const getCountriesNotLockedAndNotUpdated = () => {
-  return CountrySchema.find({
+  return CountryModel.find({
     lastUpdateAt: {
       $not: { $gte: nowMinusDays(config.importer.intervalInDays) }
     }
@@ -18,7 +18,7 @@ export const getCountriesNotLockedAndNotUpdated = () => {
 };
 
 export const updateCountriesLastUpdatedAt = (countryCode: string) => {
-  return CountrySchema.findOneAndUpdate(
+  return CountryModel.findOneAndUpdate(
     { code: countryCode },
     { lastUpdateAt: new Date() },
     { new: true }

@@ -5,7 +5,7 @@ import {
   saveCampings,
   updateCountriesLastUpdatedAt
 } from "../services";
-import { logger } from "../utils";
+import { logger } from "@open-camping-api/commons";
 import { agenda, config } from "../config";
 
 type CampingImport = {
