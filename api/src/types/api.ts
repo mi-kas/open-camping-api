@@ -25,7 +25,7 @@ export interface paths {
           /** Latitude */
           lat?: number;
           /** Longitude */
-          lng?: number;
+          lon?: number;
           /** Radius in km to search within */
           radius?: number;
         };
@@ -59,69 +59,14 @@ export interface components {
       /** Array with longitude and latitude coordinates */
       coordinates: number[];
     };
-    Address: {
-      street: string;
-      city: string;
-      region: string;
-      country: string;
-    };
-    Infrastructure: {
-      electricityAtPitch?: boolean;
-      waterAtPitch?: boolean;
-      sewageAtPitch?: boolean;
-      gasAtPitch?: boolean;
-      tvAtPitch?: boolean;
-      gasBottleExchange?: boolean;
-      wlan?: boolean;
-      internetTerminal?: boolean;
-      lockers?: boolean;
-      lounge?: boolean;
-      dryingRoom?: boolean;
-      cookingFacilities?: boolean;
-      dogShowers?: boolean;
-      dogMeadow?: boolean;
-      dogBathing?: boolean;
-      rvDisposal?: boolean;
-      supermarket?: boolean;
-      breadService?: boolean;
-      imbiss?: boolean;
-      restaurant?: boolean;
-      wheelchairRamps?: boolean;
-      pavedStreets?: boolean;
-      bonfireArea?: boolean;
-      campfireAllowedAtPitch?: boolean;
-      firewood?: boolean;
-      charcoalBbqAllowed?: boolean;
-      tableBenches?: boolean;
-    };
-    Sanitary: {
-      babyChangeRoom?: boolean;
-      cabins?: boolean;
-      rentableCabins?: boolean;
-      wheelchairAccessible?: boolean;
-      washingMachines?: boolean;
-      clothesDryer?: boolean;
-    };
-    Leisure: {
-      playground?: boolean;
-    };
-    Rentals: {
-      tents?: boolean;
-    };
-    CampingLinks: {
-      campinginfo: string;
-      website?: string;
-    };
     Camping: {
       id: string;
-      name: string;
-      stars?: number;
+      /** GeoJSON point of the camping's location */
       location: components["schemas"]["GeoLocation"];
-      address: components["schemas"]["Address"];
-      infrastructure: components["schemas"]["Infrastructure"];
-      sanitary: components["schemas"]["Sanitary"];
-      leisure: components["schemas"]["Leisure"];
-      rentals: components["schemas"]["Rentals"];
+      /** ISO 3166-1 alpha-2 code of the country */
+      countryCode: string;
+      /** Tags attached to the OpenStreetMap listing of the camping (see https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dcamp_site) */
+      tags?: { [key: string]: any };
     };
     Health: {
       status: string;

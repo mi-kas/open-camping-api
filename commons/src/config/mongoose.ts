@@ -12,7 +12,7 @@ const connect = async (cb: Callback) => {
       useCreateIndex: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
-      dbName: "camping-api"
+      dbName: config.db.name
     });
     logger.info("Mongoose successfully connected to host 🔗");
     cb();

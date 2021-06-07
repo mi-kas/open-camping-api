@@ -20,7 +20,7 @@ export const findNearby = async (
   const limit = Number(req.query?.limit ?? 20);
   let searchParams: CampingSearch = { offset, limit };
 
-  if (req.query?.lat && req.query?.lng) {
+  if (req.query?.lat && req.query?.lon) {
     if (!req.query?.radius) {
       return next({
         status: 400,
@@ -32,7 +32,7 @@ export const findNearby = async (
       location: {
         radius: Number(req.query.radius),
         lat: Number(req.query.lat),
-        lng: Number(req.query.lng)
+        lon: Number(req.query.lon)
       }
     };
   }

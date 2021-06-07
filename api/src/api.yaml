@@ -53,7 +53,7 @@ paths:
             minimum: -85
           description: Latitude
         - in: query
-          name: lng
+          name: lon
           schema:
             type: number
             format: float
@@ -138,149 +138,23 @@ components:
         - type
         - coordinates
 
-    Address:
-      properties:
-        street:
-          type: string
-        city:
-          type: string
-        region:
-          type: string
-        country:
-          type: string
-      required:
-        - street
-        - city
-        - region
-        - country
-
-    Infrastructure:
-      properties:
-        electricityAtPitch:
-          type: boolean
-        waterAtPitch:
-          type: boolean
-        sewageAtPitch:
-          type: boolean
-        gasAtPitch:
-          type: boolean
-        tvAtPitch:
-          type: boolean
-        gasBottleExchange:
-          type: boolean
-        wlan:
-          type: boolean
-        internetTerminal:
-          type: boolean
-        lockers:
-          type: boolean
-        lounge:
-          type: boolean
-        dryingRoom:
-          type: boolean
-        cookingFacilities:
-          type: boolean
-        dogShowers:
-          type: boolean
-        dogMeadow:
-          type: boolean
-        dogBathing:
-          type: boolean
-        rvDisposal:
-          type: boolean
-        supermarket:
-          type: boolean
-        breadService:
-          type: boolean
-        imbiss:
-          type: boolean
-        restaurant:
-          type: boolean
-        wheelchairRamps:
-          type: boolean
-        pavedStreets:
-          type: boolean
-        bonfireArea:
-          type: boolean
-        campfireAllowedAtPitch:
-          type: boolean
-        firewood:
-          type: boolean
-        charcoalBbqAllowed:
-          type: boolean
-        tableBenches:
-          type: boolean
-
-    Sanitary:
-      properties:
-        babyChangeRoom:
-          type: boolean
-        cabins:
-          type: boolean
-        rentableCabins:
-          type: boolean
-        wheelchairAccessible:
-          type: boolean
-        washingMachines:
-          type: boolean
-        clothesDryer:
-          type: boolean
-
-    Leisure:
-      properties:
-        playground:
-          type: boolean
-
-    Rentals:
-      properties:
-        tents:
-          type: boolean
-
-    CampingLinks:
-      properties:
-        campinginfo:
-          type: string
-        website:
-          type: string
-      required:
-        - campinginfo
-
     Camping:
       properties:
         id:
           type: string
-          # format: mongo-objectid
-        name:
-          type: string
-        # description:
-        #   type: string
-        stars:
-          type: number
         location:
           $ref: "#/components/schemas/GeoLocation"
-        address:
-          $ref: "#/components/schemas/Address"
-        infrastructure:
-          $ref: "#/components/schemas/Infrastructure"
-        sanitary:
-          $ref: "#/components/schemas/Sanitary"
-        leisure:
-          $ref: "#/components/schemas/Leisure"
-        rentals:
-          $ref: "#/components/schemas/Rentals"
-        # links:
-        #   $ref: "#/components/schemas/CampingLinks"
+          description: GeoJSON point of the camping's location
+        countryCode:
+          type: string
+          description: ISO 3166-1 alpha-2 code of the country
+        tags:
+          type: object
+          description: Tags attached to the OpenStreetMap listing of the camping (see https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dcamp_site)
       required:
         - id
-        - name
-        # - description
         - location
-        - address
-        - infrastructure
-        - sanitary
-        - leisure
-        - rentals
-        # - links
+        - countryCode
 
     Health:
       required:

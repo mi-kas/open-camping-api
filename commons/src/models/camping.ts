@@ -17,9 +17,7 @@ export type Camping = {
   countryCode: string;
 };
 
-export interface CampingDocument extends Camping, mongoose.Document {
-  toResponse(): any;
-}
+export interface CampingDocument extends Camping, mongoose.Document {}
 
 const CampingSchema = new mongoose.Schema<
   CampingDocument,
