@@ -11,8 +11,7 @@ const connect = async (cb: Callback) => {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,
-      useFindAndModify: false,
-      dbName: config.db.name
+      useFindAndModify: false
     });
     logger.info("Mongoose successfully connected to host 🔗");
     cb();
