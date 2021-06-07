@@ -12,7 +12,8 @@
     "prebuild": "rimraf build",
     "build": "tsc",
     "test": "echo 'No tests defined yet'",
-    "lint": "eslint --ext ts src"
+    "lint": "eslint --ext ts src",
+    "import:countries": "./scripts/mongo_import.sh"
   },
   "dependencies": {
     "agenda": "^4.1.3",
