@@ -19,7 +19,7 @@ export const fetchCampings = async (
       logger.error(`${current}\tREMARK: ${data.remark}`);
       throw Error("Got data with remark");
     }
-    logger.debug(
+    logger.info(
       `${current}\tCampings: ${data?.elements?.length ?? 0}\tDuration: ${(
         (Date.now() - start) /
         1000

@@ -34,7 +34,7 @@ export const importCampingsForCountry = async ({
 };
 
 export const startImport = async () => {
-  logger.debug(`Starting import`);
+  logger.info(`Starting import`);
   const countries = await getCountriesNotLockedAndNotUpdated();
   logger.debug(`Got ${countries.length} countries`);
   for (const country of countries) {

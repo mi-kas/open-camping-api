@@ -1,7 +1,7 @@
 {
   "name": "@open-camping-api/importer",
   "version": "0.0.1",
-  "description": "Camping data importer",
+  "description": "Open camping data importer",
   "repository": "https://github.com/mi-kas/open-camping-api.git",
   "author": "Michael Kaserer <mi.kaserer@gmail.com>",
   "license": "MIT",
