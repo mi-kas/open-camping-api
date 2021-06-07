@@ -7,10 +7,10 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "api",
     "commons",
-    "docs",
-    "importer"
+    "api",
+    "importer",
+    "docs"
   ],
   "scripts": {
     "start": "yarn workspaces run start",

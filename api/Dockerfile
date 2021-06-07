@@ -22,9 +22,10 @@ FROM node:lts-alpine AS release
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
-COPY --from=build /app/api/package.json /app/api/package.json
-COPY --from=build /app/api/build /app/api/build
-COPY --from=build /app/commons/build /app/commons/build
+COPY --from=build /app/api/package.json ./api/package.json
+COPY --from=build /app/api/build ./api/build
+COPY --from=build /app/commons/package.json ./commons/package.json
+COPY --from=build /app/commons/build ./commons/build
 # Remove dev dependencies
 RUN yarn install --frozen-lockfile --production
 # Clear the global yarn cache
