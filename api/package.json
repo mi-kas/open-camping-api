@@ -11,11 +11,11 @@
     "start": "ts-node-dev --transpile-only --no-notify src/server.ts",
     "prebuild": "rimraf build",
     "build": "tsc",
-    "postbuild": "cp src/api.yaml build/api.yaml",
+    "postbuild": "cp src/api.yml build/api.yml",
     "test": "echo 'No tests defined yet'",
-    "test:load": "artillery run src/loadtest.yaml",
+    "test:load": "artillery run src/loadtest.yml",
     "lint": "eslint --ext ts src",
-    "generate": "openapi-typescript src/api.yaml --output src/types/api.ts"
+    "generate": "openapi-typescript src/api.yml --output src/types/api.ts"
   },
   "dependencies": {
     "@open-camping-api/commons": "*",

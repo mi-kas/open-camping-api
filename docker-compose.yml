@@ -1,0 +1,39 @@
+version: "2.3"
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: ./api/Dockerfile
+      target: dev
+    env_file:
+      - ./api/.env
+    environment:
+      - DB_URI=mongodb://mongodb:27017/open-camping-api
+    ports:
+      - 4000:4000
+    volumes:
+      - ./api/src:/app/api/src
+      - ./commons/src:/app//commons/src
+    depends_on:
+      - mongodb
+
+  importer:
+    build:
+      context: ./
+      dockerfile: ./importer/Dockerfile
+      target: dev
+    env_file:
+      - ./importer/.env
+    environment:
+      - DB_URI=mongodb://mongodb:27017/open-camping-api
+    volumes:
+      - ./importer/src:/app/importer/src
+      - ./commons/src:/app//commons/src
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    command: --quiet

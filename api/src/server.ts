@@ -16,7 +16,7 @@ app.use(helmet());
 
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: path.join(__dirname, "api.yaml")
+    apiSpec: path.join(__dirname, "api.yml")
   })
 );
 
