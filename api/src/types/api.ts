@@ -15,24 +15,16 @@ export interface paths {
   };
   "/campings": {
     /** Search campings */
-    get: {
-      parameters: {
-        query: {
-          /** The number of campings to skip before starting to collect the result set */
-          offset: number;
-          /** The numbers of campings to return */
-          limit?: number;
-          /** Latitude */
-          lat?: number;
-          /** Longitude */
-          lon?: number;
-          /** Radius in km to search within */
-          radius?: number;
-        };
-      };
+    post: {
       responses: {
         200: components["responses"]["Campings"];
         default: components["responses"]["Error"];
+      };
+      /** Camping search request body */
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["CampingSearch"];
+        };
       };
     };
   };
@@ -54,18 +46,46 @@ export interface paths {
 
 export interface components {
   schemas: {
-    GeoLocation: {
+    /** Array with longitude and latitude coordinates */
+    Point2D: number[];
+    /** GeoJSON point */
+    Point: {
       type: "Point";
-      /** Array with longitude and latitude coordinates */
-      coordinates: number[];
+      coordinates: components["schemas"]["Point2D"];
     };
+    /** GeoJSON polygon */
+    Polygon: {
+      type: "Polygon";
+      coordinates: components["schemas"]["Point2D"][][];
+    };
+    /** Searches for campings near the specified coordinates and within the specified maximum distance. Campings are returned from nearest to farthest. */
+    PointSearch: {
+      geometry: components["schemas"]["Point"];
+      /** Maximum distance in meters from the point coordinates */
+      maxDistance: number;
+    };
+    /** Searches for campings within the specified polygon */
+    PolygonSearch: {
+      geometry: components["schemas"]["Polygon"];
+    };
+    CampingSearch: {
+      /** The number of campings to skip before starting to collect the result set */
+      offset: number;
+      /** The number of campings to skip before starting to collect the result set */
+      limit: number;
+      countryCode?: components["schemas"]["CountryCode"];
+      location?:
+        | components["schemas"]["PointSearch"]
+        | components["schemas"]["PolygonSearch"];
+    };
+    /** ISO 3166-1 alpha-2 code of the country */
+    CountryCode: string;
     Camping: {
       id: string;
       /** GeoJSON point of the camping's location */
-      location: components["schemas"]["GeoLocation"];
-      /** ISO 3166-1 alpha-2 code of the country */
-      countryCode: string;
-      /** Tags attached to the OpenStreetMap listing of the camping (see https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dcamp_site) */
+      location: components["schemas"]["Point"];
+      countryCode: components["schemas"]["CountryCode"];
+      /** Tags attached to the OpenStreetMap listing of the camping */
       tags?: { [key: string]: any };
     };
     Health: {

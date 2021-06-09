@@ -1,5 +1,5 @@
 import { Router, Request, Response } from "express";
-import { findNearby, findById } from "./controllers/camping";
+import { searchCampings, findCampingById } from "./controllers";
 
 export const router = Router();
 
@@ -7,5 +7,5 @@ router.get("/health", (_req: Request, res: Response) =>
   res.json({ status: "alive" })
 );
 
-router.get("/campings", findNearby);
-router.get("/campings/:id", findById);
+router.post("/campings", searchCampings);
+router.get("/campings/:id", findCampingById);

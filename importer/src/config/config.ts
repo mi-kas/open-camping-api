@@ -10,7 +10,7 @@ const hosts = [
 export const config = {
   importer: {
     intervalInDays: 7,
-    concurrency: 20
+    concurrency: 10
   },
   osm: {
     host: hosts[2],

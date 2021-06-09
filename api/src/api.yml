@@ -1,8 +1,8 @@
 openapi: "3.0.0"
 info:
   version: 0.0.1
-  title: Camping API
-  description: An API to search for campgrounds in the EU
+  title: OPEN Camping API
+  description: An open REST API to search for campings
   license:
     name: MIT
     url: https://github.com/mi-kas/open-camping-api/blob/main/LICENSE
@@ -27,45 +27,15 @@ paths:
           $ref: "#/components/responses/Error"
 
   /campings:
-    get:
+    post:
       description: Search campings
-      parameters:
-        - in: query
-          name: offset
-          required: true
-          schema:
-            type: integer
-            minimum: 0
-          description: The number of campings to skip before starting to collect the result set
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            minimum: 0
-            maximum: 100
-          description: The numbers of campings to return
-        - in: query
-          name: lat
-          schema:
-            type: number
-            format: float
-            maximum: 85
-            minimum: -85
-          description: Latitude
-        - in: query
-          name: lon
-          schema:
-            type: number
-            format: float
-            maximum: 180
-            minimum: -180
-          description: Longitude
-        - in: query
-          name: radius
-          schema:
-            type: integer
-            minimum: 0
-          description: Radius in km to search within
+      requestBody:
+        description: Camping search request body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CampingSearch"
       responses:
         "200":
           $ref: "#/components/responses/Campings"
@@ -122,35 +92,108 @@ components:
               item:
                 $ref: "#/components/schemas/Camping"
   schemas:
-    GeoLocation:
+    Point2D:
+      type: array
+      description: Array with longitude and latitude coordinates
+      maxItems: 2
+      minItems: 2
+      items:
+        type: number
+
+    Point:
+      description: GeoJSON point
+      externalDocs:
+        url: https://datatracker.ietf.org/doc/html/rfc7946#section-3.1.2
+      required:
+        - type
+        - coordinates
       properties:
         type:
           type: string
           enum: [Point]
         coordinates:
-          type: array
-          maxItems: 2
-          minItems: 2
-          items:
-            type: number
-          description: Array with longitude and latitude coordinates
+          $ref: "#/components/schemas/Point2D"
+
+    Polygon:
+      description: GeoJSON polygon
+      externalDocs:
+        url: https://datatracker.ietf.org/doc/html/rfc7946#section-3.1.6
       required:
         - type
         - coordinates
+      properties:
+        type:
+          type: string
+          enum: [Polygon]
+        coordinates:
+          type: array
+          items:
+            type: array
+            items:
+              $ref: "#/components/schemas/Point2D"
+
+    PointSearch:
+      description: Searches for campings near the specified coordinates and within the specified maximum distance. Campings are returned from nearest to farthest.
+      required:
+        - geometry
+        - maxDistance
+      properties:
+        geometry:
+          $ref: "#/components/schemas/Point"
+        maxDistance:
+          type: integer
+          minimum: 0
+          description: Maximum distance in meters from the point coordinates
+
+    PolygonSearch:
+      description: Searches for campings within the specified polygon
+      required:
+        - geometry
+      properties:
+        geometry:
+          $ref: "#/components/schemas/Polygon"
+
+    CampingSearch:
+      required:
+        - offset
+        - limit
+      properties:
+        offset:
+          type: integer
+          minimum: 0
+          description: The number of campings to skip before starting to collect the result set
+        limit:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: The number of campings to skip before starting to collect the result set
+        countryCode:
+          $ref: "#/components/schemas/CountryCode"
+        location:
+          oneOf:
+            - $ref: "#/components/schemas/PointSearch"
+            - $ref: "#/components/schemas/PolygonSearch"
+
+    CountryCode:
+      type: string
+      description: ISO 3166-1 alpha-2 code of the country
+      minLength: 2
+      maxLength: 2
 
     Camping:
       properties:
         id:
           type: string
         location:
-          $ref: "#/components/schemas/GeoLocation"
+          $ref: "#/components/schemas/Point"
           description: GeoJSON point of the camping's location
         countryCode:
-          type: string
-          description: ISO 3166-1 alpha-2 code of the country
+          $ref: "#/components/schemas/CountryCode"
         tags:
           type: object
-          description: Tags attached to the OpenStreetMap listing of the camping (see https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dcamp_site)
+          description: Tags attached to the OpenStreetMap listing of the camping
+          externalDocs:
+            url: https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dcamp_site
       required:
         - id
         - location
