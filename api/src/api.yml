@@ -76,12 +76,7 @@ components:
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              items:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Camping"
+            $ref: "#/components/schemas/CampingsResponse"
     Camping:
       description: Single camping object
       content:
@@ -198,6 +193,37 @@ components:
         - id
         - location
         - countryCode
+
+    CampingsResponse:
+      required:
+        - items
+        - meta
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Camping"
+        meta:
+          $ref: "#/components/schemas/Meta"
+
+    Meta:
+      required:
+        - totalCount
+        - offset
+        - limit
+        - hasNextPage
+        - hasPrevPage
+      properties:
+        totalCount:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+        hasNextPage:
+          type: boolean
+        hasPrevPage:
+          type: boolean
 
     Health:
       required:

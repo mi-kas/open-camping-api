@@ -3,16 +3,18 @@ import { CampingModel, CampingDocument } from "@open-camping-api/commons";
 
 import { components } from "../types";
 
-export type CampingResponse = components["schemas"]["Camping"];
+const EARTH_RADIUS_IN_METERS = 6378100;
 
+type CampingResponse = components["schemas"]["Camping"];
+type CampingsResponse = components["schemas"]["CampingsResponse"];
 export type CampingSearch = components["schemas"]["CampingSearch"];
 
-export const isPointSearch = (
+const isPointSearch = (
   location: CampingSearch["location"]
 ): location is components["schemas"]["PointSearch"] =>
   location.geometry.type === "Point";
 
-export const isPolygonSearch = (
+const isPolygonSearch = (
   location: CampingSearch["location"]
 ): location is components["schemas"]["PolygonSearch"] =>
   location.geometry.type === "Polygon";
@@ -26,31 +28,33 @@ const toCampingResponse = (camping: CampingDocument): CampingResponse => ({
 
 export const getCampings = async (
   search: CampingSearch
-): Promise<Array<CampingResponse>> => {
-  let filters: FilterQuery<CampingDocument> = {};
+): Promise<CampingsResponse> => {
+  let query: FilterQuery<CampingDocument> = {};
 
   if (search?.countryCode) {
-    filters = {
-      ...filters,
+    query = {
+      ...query,
       countryCode: search.countryCode
     };
   }
 
   if (search?.location) {
     if (isPointSearch(search.location)) {
-      filters = {
-        ...filters,
+      query = {
+        ...query,
         location: {
-          $near: {
-            $maxDistance: search.location.maxDistance,
-            $geometry: search.location.geometry
+          $geoWithin: {
+            $centerSphere: [
+              search.location.geometry.coordinates,
+              search.location.maxDistance / EARTH_RADIUS_IN_METERS
+            ]
           }
         }
       };
     }
     if (isPolygonSearch(search.location)) {
-      filters = {
-        ...filters,
+      query = {
+        ...query,
         location: {
           $geoWithin: {
             $geometry: search.location.geometry
@@ -59,12 +63,27 @@ export const getCampings = async (
       };
     }
   }
-  const campings = await CampingModel.find(filters)
+  const campingsPromise = CampingModel.find(query)
     .skip(search.offset)
     .limit(search.limit)
     .exec();
+  const totalCountPromise = CampingModel.countDocuments(query);
+  const [campings, totalCount] = await Promise.all([
+    campingsPromise,
+    totalCountPromise
+  ]);
+  const items = campings.map(camping => toCampingResponse(camping));
 
-  return campings.map(camping => toCampingResponse(camping));
+  return {
+    items,
+    meta: {
+      totalCount,
+      offset: search.offset,
+      limit: search.limit,
+      hasNextPage: search.offset + items.length < totalCount,
+      hasPrevPage: totalCount > 0 && search.offset > 0
+    }
+  };
 };
 
 export const getCampingById = async (id: string): Promise<CampingResponse> => {

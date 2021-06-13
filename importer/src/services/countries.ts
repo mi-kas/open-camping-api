@@ -1,5 +1,5 @@
 import { config } from "../config";
-import { CountryModel } from "../models";
+import { CountryModel } from "@open-camping-api/commons";
 
 const nowMinusDays = (days: number) => {
   var date = new Date();

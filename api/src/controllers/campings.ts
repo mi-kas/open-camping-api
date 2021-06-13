@@ -30,8 +30,8 @@ export const searchCampings = async (
     };
   }
 
-  const items = await getCampings(searchParams);
-  return res.json({ items });
+  const { items, meta } = await getCampings(searchParams);
+  return res.json({ items, meta });
 };
 
 export const findCampingById = async (

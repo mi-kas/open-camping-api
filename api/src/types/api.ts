@@ -88,6 +88,17 @@ export interface components {
       /** Tags attached to the OpenStreetMap listing of the camping */
       tags?: { [key: string]: any };
     };
+    CampingsResponse: {
+      items: components["schemas"]["Camping"][];
+      meta: components["schemas"]["Meta"];
+    };
+    Meta: {
+      totalCount: number;
+      offset: number;
+      limit: number;
+      hasNextPage: boolean;
+      hasPrevPage: boolean;
+    };
     Health: {
       status: string;
     };
@@ -117,9 +128,7 @@ export interface components {
     /** Array of campings */
     Campings: {
       content: {
-        "application/json": {
-          items?: components["schemas"]["Camping"][];
-        };
+        "application/json": components["schemas"]["CampingsResponse"];
       };
     };
     /** Single camping object */
