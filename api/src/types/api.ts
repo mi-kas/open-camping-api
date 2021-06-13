@@ -78,15 +78,123 @@ export interface components {
         | components["schemas"]["PointSearch"]
         | components["schemas"]["PolygonSearch"];
     };
-    /** ISO 3166-1 alpha-2 code of the country */
+    /** The ISO 3166-1 alpha-2 two letter country code in upper case */
     CountryCode: string;
+    BooleanTag: "yes" | "no";
+    ClassificationTags: {
+      /** Type of campsite */
+      tourism?: "camp_site" | "camp_pitch" | "caravan_site";
+      /** An approved classification system related to the level of services and amenities */
+      camp_site?: "basic" | "standard" | "serviced" | "deluxe";
+      /** An alternative classification scheme, used in France for example */
+      stars?: number;
+      /** Whether a fee is required to use this campsite */
+      fee?: components["schemas"]["BooleanTag"];
+      /** Specify the opening hours and season for this campsite */
+      opening_hours?: string;
+      /** Is the camp site lit at night? */
+      lit?: components["schemas"]["BooleanTag"];
+    };
+    ContactTags: {
+      /** The name of the city as given in postal addresses of the campsite */
+      "addr:city"?: string;
+      /** The postal code of the campsite */
+      "addr:postcode"?: string;
+      /** The name of the street */
+      "addr:street"?: string;
+      /** The house number (may contain letters, dashes or other characters) */
+      "addr:housenumber"?: string;
+      "addr:country"?: components["schemas"]["CountryCode"];
+      /** Contact phone number */
+      phone?: string;
+      /** Campsite website */
+      website?: string;
+      /** Contact email address */
+      email?: string;
+    };
+    CapacityTags: {
+      /** Maximum number of visitors (often limited at backcountry sites) */
+      "capacity:persons"?: number;
+      /** Number of pitches available for tents */
+      "capacity:tents"?: number;
+      /** Number of pitches available for caravans/RV */
+      "capacity:caravans"?: number;
+      /** Whether camping in tents is allowed */
+      tents?: components["schemas"]["BooleanTag"];
+      /** Whether camping in vehicles is allowed */
+      caravans?: components["schemas"]["BooleanTag"];
+      /** Whether the site has cabins for rent */
+      cabins?: components["schemas"]["BooleanTag"];
+      /** Whether the site has static caravans */
+      static_caravans?: components["schemas"]["BooleanTag"];
+      /** Wheather pitches are available for rent on a yearly or seasonal basis */
+      permanent_camping?: "yes" | "no" | "only";
+    };
+    AccessTags: {
+      /** Backcountry camping without facilities. The access is by non-motorized means. */
+      backcountry?: components["schemas"]["BooleanTag"];
+      /** Are dogs allowed? */
+      dog?: "yes" | "no" | "leashed";
+      /** Is it a group-only campground? */
+      group_only?: components["schemas"]["BooleanTag"];
+      /** Whether motor vehicles (motorcycles, cars, trucks, caravans) are allowed */
+      motor_vehicle?: components["schemas"]["BooleanTag"];
+      /** Is nudism permitted? */
+      nudism?: "yes" | "no" | "accepted" | "required";
+      /** Are fires permitted? */
+      openfire?: components["schemas"]["BooleanTag"];
+      /** Are reservations possible, recommended or required, or is it "first come, first served"? */
+      reservation?: "yes" | "no" | "recommended" | "required";
+      /** Is it a scoutcamp? */
+      scout?: components["schemas"]["BooleanTag"];
+    };
+    AmenityTags: {
+      /** Whether a bbq (grill) is available */
+      bbq?: components["schemas"]["BooleanTag"];
+      /** Availability of water to drink */
+      drinking_water?: components["schemas"]["BooleanTag"];
+      /** Availability of warm water (e.g. cooking) */
+      hot_water?: components["schemas"]["BooleanTag"];
+      /** Provision of access to the internet. wlan wireless internet, e.g. WiFi. */
+      internet_access?: "yes" | "no" | "wlan";
+      /** Whether a kitchen is available */
+      kitchen?: components["schemas"]["BooleanTag"];
+      /** Whether picnic tables are available */
+      picnic_table?: components["schemas"]["BooleanTag"];
+      /** Whether the site has electricity (e.g. for caravans) */
+      power_supply?: components["schemas"]["BooleanTag"];
+      /** Place to dump caravan and RV sewage holding tanks */
+      sanitary_dump_station?: "yes" | "no" | "customers";
+      /** Are showers available? */
+      shower?: "yes" | "no" | "hot" | "cold";
+      /** Whether the campsite has a swimming pool */
+      swimming_pool?: components["schemas"]["BooleanTag"];
+      /** Are toilets available? */
+      toilets?: components["schemas"]["BooleanTag"];
+      /** If there's a clothes washing machine available */
+      washing_machine?: components["schemas"]["BooleanTag"];
+      /** Are there places to dispose waste? */
+      waste_disposal?: components["schemas"]["BooleanTag"];
+      /** No exceptions, no smoking at any time in any part of building or outdoor area */
+      smokefree?: components["schemas"]["BooleanTag"];
+    };
+    /** Tags attached to the OpenStreetMap listing of the camping */
+    Tags: {
+      /** Name of this campsite */
+      name?: string;
+      /** Name of the campsite operator */
+      operator?: string;
+    } & components["schemas"]["ClassificationTags"] &
+      components["schemas"]["ContactTags"] &
+      components["schemas"]["CapacityTags"] &
+      components["schemas"]["AccessTags"] &
+      components["schemas"]["AmenityTags"];
     Camping: {
       id: string;
       /** GeoJSON point of the camping's location */
       location: components["schemas"]["Point"];
       countryCode: components["schemas"]["CountryCode"];
-      /** Tags attached to the OpenStreetMap listing of the camping */
-      tags?: { [key: string]: any };
+      tags: components["schemas"]["Tags"];
     };
     CampingsResponse: {
       items: components["schemas"]["Camping"][];

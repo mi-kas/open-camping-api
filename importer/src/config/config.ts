@@ -15,7 +15,7 @@ export const config = {
   osm: {
     host: hosts[2],
     parts: ["node", "way", "relation"],
-    tags: ["tourism=camp_site", "tourism=camp_pitch"],
+    tags: ["tourism=camp_site", "tourism=camp_pitch", "tourism=caravan_site"],
     baseQuery: "data=[out:json][timeout:900]",
     format: "out%20meta%20center"
   }

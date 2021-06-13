@@ -171,9 +171,223 @@ components:
 
     CountryCode:
       type: string
-      description: ISO 3166-1 alpha-2 code of the country
+      description: The ISO 3166-1 alpha-2 two letter country code in upper case
       minLength: 2
       maxLength: 2
+
+    BooleanTag:
+      type: string
+      enum:
+        - yes
+        - no
+
+    ClassificationTags:
+      properties:
+        tourism:
+          type: string
+          enum:
+            - camp_site
+            - camp_pitch
+            - caravan_site
+          description: Type of campsite
+        camp_site:
+          type: string
+          enum:
+            - basic
+            - standard
+            - serviced
+            - deluxe
+          description: An approved classification system related to the level of services and amenities
+        stars:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: An alternative classification scheme, used in France for example
+        fee:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether a fee is required to use this campsite
+        opening_hours:
+          type: string
+          description: Specify the opening hours and season for this campsite
+        lit:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Is the camp site lit at night?
+
+    ContactTags:
+      properties:
+        addr:city:
+          type: string
+          description: The name of the city as given in postal addresses of the campsite
+        addr:postcode:
+          type: string
+          description: The postal code of the campsite
+        addr:street:
+          type: string
+          description: The name of the street
+        addr:housenumber:
+          type: string
+          description: The house number (may contain letters, dashes or other characters)
+        addr:country:
+          $ref: "#/components/schemas/CountryCode"
+        phone:
+          type: string
+          description: Contact phone number
+        website:
+          type: string
+          description: Campsite website
+        email:
+          type: string
+          format: email
+          description: Contact email address
+
+    CapacityTags:
+      properties:
+        capacity:persons:
+          type: integer
+          description: Maximum number of visitors (often limited at backcountry sites)
+        capacity:tents:
+          type: integer
+          description: Number of pitches available for tents
+        capacity:caravans:
+          type: integer
+          description: Number of pitches available for caravans/RV
+        tents:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether camping in tents is allowed
+        caravans:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether camping in vehicles is allowed
+        cabins:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether the site has cabins for rent
+        static_caravans:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether the site has static caravans
+        permanent_camping:
+          type: string
+          enum:
+            - yes
+            - no
+            - only
+          description: Wheather pitches are available for rent on a yearly or seasonal basis
+
+    AccessTags:
+      properties:
+        backcountry:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Backcountry camping without facilities. The access is by non-motorized means.
+        dog:
+          type: string
+          enum:
+            - yes
+            - no
+            - leashed
+          description: Are dogs allowed?
+        group_only:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Is it a group-only campground?
+        motor_vehicle:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether motor vehicles (motorcycles, cars, trucks, caravans) are allowed
+        nudism:
+          type: string
+          enum:
+            - yes
+            - no
+            - accepted
+            - required
+          description: Is nudism permitted?
+        openfire:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Are fires permitted?
+        reservation:
+          type: string
+          enum:
+            - yes
+            - no
+            - recommended
+            - required
+          description: Are reservations possible, recommended or required, or is it "first come, first served"?
+        scout:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Is it a scoutcamp?
+
+    AmenityTags:
+      properties:
+        bbq:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether a bbq (grill) is available
+        drinking_water:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Availability of water to drink
+        hot_water:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Availability of warm water (e.g. cooking)
+        internet_access:
+          type: string
+          enum:
+            - yes
+            - no
+            - wlan
+          description: Provision of access to the internet. wlan wireless internet, e.g. WiFi.
+        kitchen:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether a kitchen is available
+        picnic_table:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether picnic tables are available
+        power_supply:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether the site has electricity (e.g. for caravans)
+        sanitary_dump_station:
+          type: string
+          enum:
+            - yes
+            - no
+            - customers
+          description: Place to dump caravan and RV sewage holding tanks
+        shower:
+          type: string
+          enum:
+            - yes
+            - no
+            - hot
+            - cold
+          description: Are showers available?
+        swimming_pool:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Whether the campsite has a swimming pool
+        toilets:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Are toilets available?
+        washing_machine:
+          $ref: "#/components/schemas/BooleanTag"
+          description: If there's a clothes washing machine available
+        waste_disposal:
+          $ref: "#/components/schemas/BooleanTag"
+          description: Are there places to dispose waste?
+        smokefree:
+          $ref: "#/components/schemas/BooleanTag"
+          description: No exceptions, no smoking at any time in any part of building or outdoor area
+
+    Tags:
+      description: Tags attached to the OpenStreetMap listing of the camping
+      externalDocs:
+        url: https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dcamp_site
+      allOf:
+        - type: object
+          properties:
+            name:
+              type: string
+              description: Name of this campsite
+            operator:
+              type: string
+              description: Name of the campsite operator
+        - $ref: "#/components/schemas/ClassificationTags"
+        - $ref: "#/components/schemas/ContactTags"
+        - $ref: "#/components/schemas/CapacityTags"
+        - $ref: "#/components/schemas/AccessTags"
+        - $ref: "#/components/schemas/AmenityTags"
 
     Camping:
       properties:
@@ -185,14 +399,12 @@ components:
         countryCode:
           $ref: "#/components/schemas/CountryCode"
         tags:
-          type: object
-          description: Tags attached to the OpenStreetMap listing of the camping
-          externalDocs:
-            url: https://wiki.openstreetmap.org/wiki/Tag:tourism%3Dcamp_site
+          $ref: "#/components/schemas/Tags"
       required:
         - id
         - location
         - countryCode
+        - tags
 
     CampingsResponse:
       required:
