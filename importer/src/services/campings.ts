@@ -45,7 +45,7 @@ const getCampingFromRaw = (raw: any, countryCode: string): Camping => {
       type: "Point",
       coordinates
     },
-    tags: raw.tags,
+    tags: { ...raw.tags, ["addr:country"]: countryCode },
     countryCode
   };
 };
